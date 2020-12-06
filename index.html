@@ -7,39 +7,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Quiz</title>
+    <title>Code Quiz</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./assets/style.css">
   </head>
+
 
   <body>
     <div class="container-fluid header">
       <div class="row" style="min-height: 30px; min-width: 300px;">
-        <div class="col px-4 py-2 text-left" id="highest-score"><a src="highscores.html" alt="links to Highest Scores list">Highest Scores</a></div>
-        <div class="col px-4 py-2 text-right" id="timer">Countdown timer here</div>
+        <div class="col px-4 py-2 text-left" id="highscores"><a href="highscores.html" alt="link to High Scores scoreboard">High Scores</a></div>
+        <div class="col px-4 py-2 text-right"><span id="timer"></span></div>
       </div>
     </div>
     
-    <div class="container p-5" style="max-width: 660px;">
+    <div class="container p-5" style="max-width: 760px;">
       
-      <div class="row" id="topRow">
-        <h1 class="col welcome font-weight-bold">Welcome to Speed Reader</h1>
+      <div class="row pb-3">
+        <div class="col text-center" id="topRow"> 
+          <h1 class="font-weight-bold" id="header">Coding Quiz Challenge</h1>
+        </div>  
       </div>
 
-      <div class="row" id="middleRow">
-        <h2 class="col" id="countdown">this is an h2</h2>
+      <div class="row pb-3">
+        <div class="col text-center" id="middleRow">
+          <p id="main">Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by ten seconds!</p>
+        </div>
       </div>
 
-      <div class="row" id="bottomRow">
-        <p class="col" id="main">here is p</p>
+      <div class="row pb-3">
+        <div class="col text-center" id="bottomRow">
+          <button class="btn btnLook" id="start-quiz-btn">Start Quiz</button>
+        </div>
       </div>
-
-      <button type="button" class="btn btnLook" role="submit">Submit</button>
     </div>
-    <!-- <script src="./script.js"></script> -->
+
+
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="./assets/script.js"></script>
+    <script src="./assets/quiz-questions-script.js"></script>
   </body>
 </html>
   
