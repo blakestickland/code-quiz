@@ -4,48 +4,9 @@
 var startQuizBtn = document.querySelector("#start-quiz-btn");
 var body = document.body;
 
+// click on Start Quiz button runs buildQuiz function
 startQuizBtn.addEventListener("click", function buildQuiz() {
 
-
-// list of all questions, choices, and answers
-var questions = [
-  {
-    title: "Commonly used data types DO NOT include:",
-    choices: ["1. strings", "2. booleans", "3. alerts", "4. numbers"],
-    answer: "alerts"
-  },
-  {
-    title: "The condition in an if / else statement is enclosed within ____.",
-    choices: ["1. quotes", "2. curly brackets", "3. parentheses", "4. square brackets"],
-    answer: "parentheses"
-  },
-  {
-    title: "Arrays in JavaScript can be used to store ____.",
-    choices: [
-      "1. numbers and strings",
-      "2. other arrays",
-      "3. booleans",
-      "4. all of the above"
-    ],
-    answer: "all of the above"
-  },
-  {
-    title:
-      "String values must be enclosed within ____ when being assigned to variables.",
-    choices: ["1. commas", "2. curly brackets", "3. quotes", "4. parentheses"],
-    answer: "quotes"
-  },
-  {
-    title:
-      "A very useful tool used during development and debugging for printing content to the debugger is:",
-    choices: ["1. JavaScript", "2. terminal / bash", "3. for loops", "4. console.log"],
-    answer: "console.log"
-  }
-];
-
-
-
-// multiple choice quiz page
 
 // Create all necessary elements
 var questionContainer = document.querySelector("h1");
@@ -80,95 +41,97 @@ var listItems = document.getElementsByTagName("li");
 
 
 // replace text in top row/header
-header.innerHTML = questions[0].title;
 
-// Set the text content of relevant elements
-btn1.innerText = questions[0].choices[0];
-btn2.innerText = questions[0].choices[1];
-btn3.innerText = questions[0].choices[2];
-btn4.innerText = questions[0].choices[3];
+let currentQuestion = 0;
 
+renderQuestion(currentQuestion);
+
+function renderQuestion(questionIndex){
+  header.innerHTML = questions[questionIndex].title;
+
+  let choices = questions[questionIndex].choices;
+
+  listEl.textContent = "";
+  
+  for (let ii = 0; ii < choices.length; ii++) {
+    const choice = choices[ii];
+    const button = document.createElement('button');
+  
+  
+    button.textContent = (ii + 1) + ". " + choice;
+    button.setAttribute('data-answer', choice);
+    button.setAttribute("class", "btn btnLook mb-2 choiceButtons");
+  
+  
+  
+    button.addEventListener('click', function(event){
+  
+      // check if clicked on correct answer
+      let choiceMadeByUser = event.target.getAttribute('data-answer');
+  
+      // second step: display "correct" or "wrong"
+      const isCorrect = choiceMadeByUser === questions[questionIndex].answer;
+      if(isCorrect){
+        resultBar.textContent = 'Correct'
+      }else{
+        resultBar.textContent = 'Wrong'
+        // 
+      }
+  
+      // load next question and choices array
+      currentQuestion++;
+      renderQuestion(currentQuestion);
+  
+    })
+  
+    const li = document.createElement('li');
+  
+  
+    li.appendChild(button);
+    listEl.appendChild(li)
+    
+  
+  }
+}
 
 // Append all of our elements
 topRow.appendChild(h1El);
 middleRow.appendChild(listEl);
-listEl.appendChild(li1);
-listEl.appendChild(li2);
-listEl.appendChild(li3);
-listEl.appendChild(li4);
 
-li1.appendChild(btn1);
-li2.appendChild(btn2);
-li3.appendChild(btn3);
-li4.appendChild(btn4);
-
-middleRow.appendChild(horiLine);  // not displaying yet
 
 // remove attributes
-
 middleRow.classList.replace("text-center", "text-left");
 
 
 
-// Style all of our elements
-// h1El.setAttribute("style", "text-align: left; font-weight:bold; font-size: 2rem;");
+// Style elements
 header.setAttribute("style", "text-align: left");
 middleRow.setAttribute("style", "display: flex; float: left");
 listEl.setAttribute("style", "padding-left: 0; margin-left:0; list-style: none;");
-// li1.setAttribute("style", "mb-2 ; color:white; background:purple; text-align:center;");
-// li2.setAttribute("style", "margin-left: 15px; margin-right: s15px; color:white; background:purple; text-align:center;");
-// li3.setAttribute("style", "margin-left: 15px; margin-right: 15px; color:white; background:purple; text-align:center;");
-// li4.setAttribute("style", "margin-left: 15px; margin-right: 15px; color:white; background:purple; text-align:center;");
-
-btn1.setAttribute("class", "btn btnLook mb-2");
-btn2.setAttribute("class", "btn btnLook mb-2");
-btn3.setAttribute("class", "btn btnLook mb-2");
-btn4.setAttribute("class", "btn btnLook mb-2");
 
 
-var correctChoice = "";
-var incorrectChoice = "";
 
-correctChoice.addEventListener("click", function () {
-  resultBar.textContent = "Correct!";
-});
-
-incorrectChoice.addEventListener("click", function () {
-  resultBar.textContent = "Incorrect :-(";
-});
+for (var i = 0; i < Object.keys(questions).length; i++) {
+  console.log(Object.keys(questions[i]));
+}
 
 
 }); // end of QandA page
+
 
 function showResults() {
 
 }
 
 
-var displayQuestion = function () {
-
-}
-
-var displayAnswerChoices = function () {
-
-}
-
-var clickedAnswer = function () {
-
-}
-
-
-// multiple choice variables
-
 // timer variables
-var timeLeft = 75;
-var timerEl = document.getElementById("timer");
-
+let timeLeft = 75;
+let timerEl = document.getElementById("#timer");
+timerEl.textContent = "Timer: " + timeLeft;
 
 // countdown timer  based on Unit 4 Activities 09 SpeedReader
 
 function prepareRead() {
-  timerEl.textContent = "Timer: " + timeLeft;
   var timeInterval = setInterval(function() {
     timeLeft = 75;
     timeLeft--;

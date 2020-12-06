@@ -45,7 +45,7 @@ You are required to submit the following for review:
 To Do:
 * make files: yes
 
-* use Krishna's suggestions for quiz questions and answers
+* use Krishna's suggestions for quiz questions and answers: yes
 
 * use "contact page" from Unit 4 Day 2 @22:45 in video for entering name for Highest Score
 
