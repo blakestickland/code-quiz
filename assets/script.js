@@ -1,20 +1,23 @@
 // script.js
 
-// button variables
+// declare starting variables
 var startQuizBtn = document.querySelector("#start-quiz-btn");
 var body = document.body;
+let currentQuestion = 0;
+
+
 
 // click on Start Quiz button runs buildQuiz function
 startQuizBtn.addEventListener("click", function buildQuiz() {
 
-
 // Create all necessary elements
 var questionContainer = document.querySelector("h1");
 var choicesContainer = document.getElementById("main");
-var resultBar = document.getElementById("bottomRow");
 var header = document.getElementById("header");
 var topRow = document.getElementById("topRow");
 var middleRow = document.getElementById("middleRow");
+var resultBar = document.getElementById("bottomRow");
+var bottomRow = document.getElementById("bottomRow");
 var main = document.getElementById("main");
 
 // remove unwanted elements
@@ -24,30 +27,18 @@ startQuizBtn.remove();
 
 var h1El = document.createElement("h1");
 var listEl = document.createElement("ul");
-var li1 = document.createElement("li");
-var li2 = document.createElement("li");
-var li3= document.createElement("li");
-var li4 = document.createElement("li");
-
-var btn1 = document.createElement("button");
-var btn2 = document.createElement("button");
-var btn3 = document.createElement("button");
-var btn4 = document.createElement("button");
+let correctWrongEl = document.createElement("p");
 
 var horiLine = document.createElement("hr");
 
-// Store our li elements in a variale
-var listItems = document.getElementsByTagName("li");
 
-
-// replace text in top row/header
-
-let currentQuestion = 0;
+// render question as a function and loop through q and a
 
 renderQuestion(currentQuestion);
 
 function renderQuestion(questionIndex){
-  header.innerHTML = questions[questionIndex].title;
+  event.preventDefault();
+  header.textContent = questions[questionIndex].title;
 
   let choices = questions[questionIndex].choices;
 
@@ -55,31 +46,120 @@ function renderQuestion(questionIndex){
   
   for (let ii = 0; ii < choices.length; ii++) {
     const choice = choices[ii];
-    const button = document.createElement('button');
+    const button = document.createElement("button");
   
   
     button.textContent = (ii + 1) + ". " + choice;
-    button.setAttribute('data-answer', choice);
+    button.setAttribute("data-answer", choice);
     button.setAttribute("class", "btn btnLook mb-2 choiceButtons");
   
   
   
-    button.addEventListener('click', function(event){
-  
+    button.addEventListener("click", function(event){
+      // prepare for Correct/Wrong result
+      bottomRow.appendChild(correctWrongEl);
+
       // check if clicked on correct answer
       let choiceMadeByUser = event.target.getAttribute('data-answer');
   
-      // second step: display "correct" or "wrong"
+      // second step: display "correct" or "wrong" for 2 seconds
       const isCorrect = choiceMadeByUser === questions[questionIndex].answer;
       if(isCorrect){
-        resultBar.textContent = 'Correct'
-      }else{
-        resultBar.textContent = 'Wrong'
-        // 
+        // resultBar.prepend(horiLine);
+        bottomRow.textContent = 'Correct';
+        setTimeout(function(){resultBar.textContent = "";}, 2000);
+      } 
+      else { 
+        // resultBar.prepend(horiLine);
+        resultBar.textContent = 'Wrong';
+        setTimeout(function(){resultBar.textContent = "";}, 2000);
+
+        // lose 15 secs from timer for every wrong answer
+        timeLeft = timeLeft - 15;
       }
   
-      // load next question and choices array
+      // load next question and choices array unless it was final question
       currentQuestion++;
+      
+      if (currentQuestion === (Object.keys(questions).length)) {
+        // store player score in new variable
+        let playerScore = timeLeft;
+        // run finalScore after 2 sec display of final question choice result
+        setTimeout(finalScore, 2000); 
+
+        function finalScore() {
+          event.preventDefault();
+            // clearing text
+            resultBar = "";
+            // change heading text
+            header.textContent = "All done!";
+            // remove unwanted elements
+            listEl.remove();
+            // add elements to page
+            const pFinalScore = document.createElement("p");
+            pFinalScore.textContent = "Your final score is " + (playerScore) + " !!!";
+            middleRow.appendChild(pFinalScore);
+            // enter intials and click on submit to see position on High Scores list
+            const pEnterInitials = document.createElement("p");
+            const inputBox = document.createElement("input");
+            const submitButton = document.createElement("button");
+
+            inputBox.setAttribute("size", "20");
+            inputBox.setAttribute("id", "initials");
+            inputBox.setAttribute("style", "display: inline");
+            submitButton.setAttribute("class", "btn btnLook ml-3");
+            submitButton.setAttribute("id", "submit-button");
+            pEnterInitials.setAttribute("id", "enterInitialsText");
+          
+            pEnterInitials.textContent = "Enter initials: ";
+            submitButton.textContent = "Submit";
+
+            bottomRow.appendChild(pEnterInitials);
+            let newPara = document.getElementById("enterInitialsText");
+            newPara.appendChild(inputBox);
+            newPara.appendChild(submitButton);
+
+            let initialsInput = document.getElementById("initials");
+            let submitBtnId = document.getElementById("submit-button");
+
+            let msgDiv = document.createElement("div");
+            bottomRow.appendChild(msgDiv);            
+
+            function displayMessage(type, message) {
+              msgDiv.textContent = message;
+              msgDiv.setAttribute("class", type);
+            }
+            
+            submitBtnId.addEventListener("click", function(event) {
+              event.preventDefault();
+            
+            // create user object from submission (activity 23)
+            let player = {
+              initials: initialsInput.value.trim(),
+              score: playerScore
+            };
+
+
+            setTimeout(function(){resultBar.textContent = "";}, 2000);
+
+            //validate the field
+            if (player.initials === "") {
+              displayMessage("error", "Initials cannot be blank");
+            } else {
+              displayMessage("success", "Compare your score with others on the Scoreboard");
+
+              // set new scoreboard entry
+              localStorage.setItem("player", JSON.stringify(player));
+
+              // get most recent player score
+              let = lastPlayer = JSON.parse(localStorage.getItem("player"));
+
+            }
+
+          });
+
+        }
+      }
       renderQuestion(currentQuestion);
   
     })
@@ -88,7 +168,7 @@ function renderQuestion(questionIndex){
   
   
     li.appendChild(button);
-    listEl.appendChild(li)
+    listEl.appendChild(li);
     
   
   }
@@ -101,6 +181,7 @@ middleRow.appendChild(listEl);
 
 // remove attributes
 middleRow.classList.replace("text-center", "text-left");
+resultBar.classList.replace("text-center", "text-left");
 
 
 
@@ -109,38 +190,35 @@ header.setAttribute("style", "text-align: left");
 middleRow.setAttribute("style", "display: flex; float: left");
 listEl.setAttribute("style", "padding-left: 0; margin-left:0; list-style: none;");
 
-
-
-for (var i = 0; i < Object.keys(questions).length; i++) {
-  console.log(Object.keys(questions[i]));
-}
-
+countdownTimer();
 
 }); // end of QandA page
 
 
 function showResults() {
-
+  
 }
 
 
 // timer variables
 let timeLeft = 75;
-let timerEl = document.getElementById("#timer");
-timerEl.textContent = "Timer: " + timeLeft;
+
+let timerEl = document.querySelector("#timer");
+timerEl.textContent = timeLeft;
 
 // countdown timer  based on Unit 4 Activities 09 SpeedReader
 
-function prepareRead() {
+function countdownTimer() {
   var timeInterval = setInterval(function() {
-    timeLeft = 75;
     timeLeft--;
-    timerEl.textContent = "Timer: " + timeLeft;
+    timerEl.textContent = timeLeft;
 
-    if (timeLeft === 0) {
+    if (timeLeft <= 0 || (currentQuestion === (Object.keys(questions).length))) {
       timerEl.textContent = "";
-      speedRead();
+      // speedRead();
       clearInterval(timeInterval);
+      // timerEl.textContent = timeLeft;
+      // playerScore = timeLeft;
     }
 
   }, 1000); // interval -- decreases by 1 sec at a time
@@ -163,7 +241,7 @@ function speedRead() {
   }, millisecondsPerWord);
 }
 
-prepareRead();
+
 
 
 
